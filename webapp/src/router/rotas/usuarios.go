@@ -2,43 +2,80 @@ package rotas
 
 import (
 	"net/http"
-	"webapp/src/middlewares"
-
-	"github.com/gorilla/mux"
+	"webapp/src/controllers"
 )
 
-// Rota representa todas as rotas da Aplicação Web
-type Rota struct {
-	URI                string
-	Metodo             string
-	Funcao             func(http.ResponseWriter, *http.Request)
-	RequerAutenticacao bool
-}
-
-// Configurar coloca todas as rotas dentro do router
-func Configurar(router *mux.Router) *mux.Router {
-	rotas := rotasLogin
-	rotas = append(rotas, rotasUsuarios...)
-	rotas = append(rotas, rotaPaginaPrincipal)
-	rotas = append(rotas, rotasPublicacoes...)
-	rotas = append(rotas, rotaLogout)
-
-	for _, rota := range rotas {
-
-		if rota.RequerAutenticacao {
-			router.HandleFunc(rota.URI,
-				middlewares.Logger(middlewares.Autenticar(rota.Funcao)),
-			).Methods(rota.Metodo)
-
-		} else {
-			router.HandleFunc(rota.URI,
-				middlewares.Logger(rota.Funcao),
-			).Methods(rota.Metodo)
-		}
-	}
-
-	fileServer := http.FileServer(http.Dir("./assets/"))
-	router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", fileServer))
-
-	return router
+var rotasUsuarios = []Rota{
+	{
+		URI:                "/criar-usuario",
+		Metodo:             http.MethodGet,
+		Funcao:             controllers.CarregarPaginaDeCadastroDeUsuario,
+		RequerAutenticacao: false,
+	},
+	{
+		URI:                "/usuarios",
+		Metodo:             http.MethodPost,
+		Funcao:             controllers.CriarUsuario,
+		RequerAutenticacao: false,
+	},
+	{
+		URI:                "/buscar-usuarios",
+		Metodo:             http.MethodGet,
+		Funcao:             controllers.CarregarPaginaDeUsuarios,
+		RequerAutenticacao: true,
+	},
+	{
+		URI:                "/usuarios/{usuarioId}",
+		Metodo:             http.MethodGet,
+		Funcao:             controllers.CarregarPerfilDoUsuario,
+		RequerAutenticacao: true,
+	},
+	{
+		URI:                "/usuarios/{usuarioId}/parar-de-seguir",
+		Metodo:             http.MethodPost,
+		Funcao:             controllers.PararDeSeguirUsuario,
+		RequerAutenticacao: true,
+	},
+	{
+		URI:                "/usuarios/{usuarioId}/seguir",
+		Metodo:             http.MethodPost,
+		Funcao:             controllers.SeguirUsuario,
+		RequerAutenticacao: true,
+	},
+	{
+		URI:                "/perfil",
+		Metodo:             http.MethodGet,
+		Funcao:             controllers.CarregarPerfilDoUsuarioLogado,
+		RequerAutenticacao: true,
+	},
+	{
+		URI:                "/editar-usuario",
+		Metodo:             http.MethodGet,
+		Funcao:             controllers.CarregarPaginaDeEdicaoDeUsuario,
+		RequerAutenticacao: true,
+	},
+	{
+		URI:                "/editar-usuario",
+		Metodo:             http.MethodPut,
+		Funcao:             controllers.EditarUsuario,
+		RequerAutenticacao: true,
+	},
+	{
+		URI:                "/atualizar-senha",
+		Metodo:             http.MethodGet,
+		Funcao:             controllers.CarregarPaginaDeAtualizacaoDeSenha,
+		RequerAutenticacao: true,
+	},
+	{
+		URI:                "/atualizar-senha",
+		Metodo:             http.MethodPost,
+		Funcao:             controllers.AtualizarSenha,
+		RequerAutenticacao: true,
+	},
+	{
+		URI:                "/deletar-usuario",
+		Metodo:             http.MethodDelete,
+		Funcao:             controllers.DeletarUsuario,
+		RequerAutenticacao: true,
+	},
 }

@@ -23,6 +23,5 @@ var rotasLogin = []Rota{
 		Metodo:             http.MethodPost,
 		Funcao:             controllers.FazerLogin,
 		RequerAutenticacao: false,
-	},	
-
+	},
 }

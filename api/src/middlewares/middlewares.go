@@ -1,7 +1,5 @@
 package middlewares
 
-//ANINHA FUNÇÕES
-
 import (
 	"api/src/autenticacao"
 	"api/src/respostas"
@@ -9,6 +7,7 @@ import (
 	"net/http"
 )
 
+// Logger escreve informações da requisição no terminal
 func Logger(proximaFuncao http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("\n%s %s %s", r.Method, r.RequestURI, r.Host)
@@ -23,6 +22,6 @@ func Autenticar(proximaFuncao http.HandlerFunc) http.HandlerFunc {
 			respostas.Erro(w, http.StatusUnauthorized, erro)
 			return
 		}
-		proximaFuncao(w, r) //proximaFuncao executa a função que chegou no parâmetro...
+		proximaFuncao(w, r)
 	}
 }

@@ -11,7 +11,7 @@ import (
 	"webapp/src/respostas"
 )
 
-// FazerLogin utiliza o email e senha para autenticar na aplicação
+// FazerLogin utiliza o e-mail e senha do usuário para autenticar na aplicação
 func FazerLogin(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
@@ -26,7 +26,6 @@ func FazerLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	url := fmt.Sprintf("%s/login", config.APIURL)
-
 	response, erro := http.Post(url, "application/json", bytes.NewBuffer(usuario))
 	if erro != nil {
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroAPI{Erro: erro.Error()})
@@ -40,15 +39,16 @@ func FazerLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var dadosAutenticacao modelos.DadosAutenticacao
-	if erro := json.NewDecoder(response.Body).Decode(&dadosAutenticacao); erro != nil {
+	if erro = json.NewDecoder(response.Body).Decode(&dadosAutenticacao); erro != nil {
 		respostas.JSON(w, http.StatusUnprocessableEntity, respostas.ErroAPI{Erro: erro.Error()})
 		return
 	}
 
 	if erro = cookies.Salvar(w, dadosAutenticacao.ID, dadosAutenticacao.Token); erro != nil {
+		respostas.JSON(w, http.StatusUnprocessableEntity, respostas.ErroAPI{Erro: erro.Error()})
 		return
-
 	}
-	fmt.Println("w:", w)
+
 	respostas.JSON(w, http.StatusOK, nil)
+
 }

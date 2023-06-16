@@ -5,7 +5,7 @@ import (
 	"webapp/src/cookies"
 )
 
-// FazerLogout remove os dados de autenticação do usuário no browser
+// FazerLogout remove os dados de autenticação salvos no browser do usuário
 func FazerLogout(w http.ResponseWriter, r *http.Request) {
 	cookies.Deletar(w)
 	http.Redirect(w, r, "/login", 302)

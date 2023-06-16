@@ -1,0 +1,9 @@
+PACOTES EXTERNOS
+//A powerful HTTP router and URL matcher for building Go web servers
+github.com/gorilla/mux
+
+//gorilla/securecookie
+go get github.com/gorilla/securecookie
+
+//A Go port of Ruby's dotenv library (Loads environment variables from .env files)
+github.com/joho/godotenv

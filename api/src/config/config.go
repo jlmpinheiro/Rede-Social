@@ -9,21 +9,18 @@ import (
 	"github.com/joho/godotenv"
 )
 
-/*
-Para carregar as variáveis ambiente vamos usar um pacote externo: go get github.com/joho/godotenv
-*/
 var (
-	//StringConexaoBanco é a string de conexão com o MySQL
+	// StringConexaoBanco é a string de conexão com o MySQL
 	StringConexaoBanco = ""
 
-	//Porta número da porta onde a API vai estar rodando
+	// Porta onde a API vai estar rodando
 	Porta = 0
 
-	//SecretKey é a chave que vai ser usada para assinar o TOKEN
+	// SecretKey é a chave que vai ser usada para assinar o token
 	SecretKey []byte
 )
 
-// Carregar inicializa as variáveis de ambiente
+// Carregar vai inicializar as variáveis de ambiente
 func Carregar() {
 	var erro error
 
@@ -31,13 +28,12 @@ func Carregar() {
 		log.Fatal(erro)
 	}
 
-	Porta, erro = strconv.Atoi(os.Getenv("API_PORT")) //strconv.Atoi converte uma string em númerico
+	Porta, erro = strconv.Atoi(os.Getenv("API_PORT"))
 	if erro != nil {
 		Porta = 9000
 	}
 
-	StringConexaoBanco = fmt.Sprintf(
-		"%s:%s@/%s?charset=utf8&parseTime=True&loc=Local",
+	StringConexaoBanco = fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv("DB_USUARIO"),
 		os.Getenv("DB_SENHA"),
 		os.Getenv("DB_NOME"),

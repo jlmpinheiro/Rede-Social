@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevBook - {{.Usuario.Nome}} </title>
+    <title>DevBook - {{ .Usuario.Nome }} </title>
     <link href="/assets/css/bootstrap.css" rel="stylesheet" />
 </head>
 
 <body>
     {{ template "cabecalho" }}
+
     {{ $SeguidoPeloUsuarioLogado := false }}
     {{ range .Usuario.Seguidores }}
     {{ if (eq .ID $.UsuarioLogadoID )}}
     {{ $SeguidoPeloUsuarioLogado = true}}
     {{ end }}
     {{ end }}
-    <h2>ID:{{$.Usuario.ID }}</h2>
-    <h2>UsuariologadoID:{{ $.UsuariologadoID }}</h2>
+
     <div class="container-fluid">
         <div class="row mt-4">
             <div class="col-12">
@@ -59,8 +59,31 @@
                 </div>
             </div>
         </div>
-    
 
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"> Publicações do Usuário {{ .Usuario.Nick }}</h5>
+                        <p class="card-text">
+                            {{ range .Usuario.Publicacoes }}
+                            {{ template "publicacao-sem-permissao" . }}
+                            {{ else }}
+                        <p class="text-muted text-center">
+                            Nenhuma publicação por enquanto...
+                        </p>
+                        {{ end }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{ template "modal-seguidores" .Usuario }}
+    {{ template "modal-seguindo" .Usuario }}
+    
     {{ template "rodape" }}
     {{ template "scripts" }}
 
